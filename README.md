@@ -1,4 +1,4 @@
-# 🌊 Godot Planar Reflection System
+# 🌊 Godot C++ Planar Reflection System 
 
 [![Godot Engine](https://img.shields.io/badge/Godot-4.4+-blue.svg)](https://godotengine.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -40,5 +40,19 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 1. Download the latest release code from Github
 2. Just copy the entire  `addons/` folder to your Godot res:// folder.
 3. If you already have a `addons/` folder, all you need is to paste the `PlanarReflectorCpp/` folder in there
+4. Enable the plugin in the Godot settings -> You might need to reload your project
 
-## Method 2: AssetLib (WiP - coming soon)
+### Method 2: AssetLib (WiP - coming soon)
+
+## 🎮 General usage:
+1. Add the PlanarReflectorCpp node to your scene
+2. Add a PlanarMesh to it
+3. Add the provided BaseMaterial and BaseShader to it (see: addons/PlanarReflectorCpp/SupportFiles/)
+4. Run your game
+5. To see reflections working in the editor, make sure you enable the plugin and "click" in the 3D scene, selecting the planar node in the scene (will refresh it)
+
+
+## 🔧 Technical Constraints
+- **Planar surfaces only** - Works best with flat surfaces
+- **No "below surface" object filtering** - It will show reflection of "underwater" elements for example. To workaround this, use cull-masks to ignore these objects.
+- **Requires Plugin enabled for editor** - To see reflections in the Editor the plugin must be active
