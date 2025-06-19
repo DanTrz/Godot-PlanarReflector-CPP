@@ -24,6 +24,7 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 - **LOD (Level of Detail)** - Distance-based performance optimization
 - **Update frequency control** - Balance quality vs performance
 - **Movement threshold detection** - Only update when camera moves
+- **Configurable reflection layers** - You can define what Visibility Layers get reflection
 - **Cached calculations** - Minimize redundant computations
 
 ## 🚀 Installation
@@ -40,8 +41,11 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 1. Add the PlanarReflectorCpp node to your scene
 2. Add a PlanarMesh to it
 3. Add the provided BaseMaterial and BaseShader to it (see: addons/PlanarReflectorCpp/SupportFiles/)
-4. Run your game
-5. To see reflections working in the editor, make sure you enable the plugin and "click" in the 3D scene, selecting the planar node in the scene (will refresh it)
+4. Make sure your objects are set the the Visibility Layer that matches the "Reflection layer" in the PlanarReflector
+5. Add custom enviroment (ideally without BG or BG COlor) and configure the PlanarReflector exported properties.
+6. Check that your lights are also in the correct layer and that your Main Camera is assigned (and the Camera CullMasks match the layers)
+7. Run your game
+8. To see reflections working in the editor, make sure you enable the plugin and "click" in the 3D scene, selecting the planar node in the scene (will refresh it)
 
 
 ## 🔧 Technical Constraints
