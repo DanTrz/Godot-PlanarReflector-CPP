@@ -10,7 +10,7 @@ subdivide_width = 10
 subdivide_depth = 10
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_wdduv"]
-viewport_path = NodePath("PlanarReflectorCPP1/@SubViewport@22662")
+viewport_path = NodePath("PlanarReflectorCPP1/@SubViewport@22312")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xt6ul"]
 seed = 10
