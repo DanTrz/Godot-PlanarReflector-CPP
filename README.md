@@ -26,14 +26,6 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 - **Movement threshold detection** - Only update when camera moves
 - **Cached calculations** - Minimize redundant computations
 
-## 🎨 Visual Examples
-
-| Feature | Preview |
-|---------|---------|
-| **Pixel Art Water** | ![Pixel Water](screenshots/pixel_water.png) |
-| **3D Reflections** | ![3D Reflections](screenshots/3d_reflections.png) |
-| **Multiple Objects** | ![Multi Objects](screenshots/multi_objects.png) |
-
 ## 🚀 Installation
 
 ### Method 1: Manual Installation
