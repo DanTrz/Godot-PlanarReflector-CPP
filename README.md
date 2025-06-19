@@ -12,23 +12,19 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 
 ### 🎯 **Core Functionality**
 - **Real-time planar reflections** with geometric accuracy
+- **Very performant** written in C++ via GDExtensions
 - **Pixel art optimized** - Works perfectly with SubViewport downscaling
 - **Dual rendering system** - Separate game and editor modes
 - **Layer-based filtering** - Control what objects appear in reflections
 - **Custom environments** - Independent lighting for reflected scenes
 
-### 🎮 **Advanced Controls**
+### 🎮 **Reflection & Performance Features**
 - **Camera mode detection** - Automatic perspective/orthographic handling
 - **Reflection offset system** - Fine-tune reflection positioning
 - **LOD (Level of Detail)** - Distance-based performance optimization
 - **Update frequency control** - Balance quality vs performance
 - **Movement threshold detection** - Only update when camera moves
-
-### ⚡ **Performance Optimizations**
 - **Cached calculations** - Minimize redundant computations
-- **Adaptive resolution** - Automatic quality scaling based on distance
-- **Frame limiting** - Configurable update frequencies
-- **Memory efficient** - Proper viewport and resource management
 
 ## 🎨 Visual Examples
 
@@ -40,12 +36,9 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 
 ## 🚀 Installation
 
-### Method 1: AssetLib (Recommended)
-1. Open Godot 4.4+
-2. Go to **AssetLib** tab
-3. Search for "Planar Reflection System"
-4. Download and install
+### Method 1: Manual Installation
+1. Download the latest release code from Github
+2. Just copy the entire  `addons/` folder to your Godot res:// folder.
+3. If you already have a `addons/` folder, all you need is to paste the `PlanarReflectorCpp/` folder in there
 
-### Method 2: Manual Installation
-1. Download the latest release from [Releases](https://github.com/yourusername/planar-reflection-system/releases)
-2. Extract to your project's `addons/` folder:
+## Method 2: AssetLib (WiP - coming soon)
