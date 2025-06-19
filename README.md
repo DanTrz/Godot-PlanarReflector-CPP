@@ -6,7 +6,7 @@
 
 A high-performance **planar reflection system** for Godot 4.4+ designed specifically for **3D pixel art games**, but can be used in any game.
 
-![Water Reflection Demo](screenshots/demo_overview.png)
+![Reflection Demo](screenshots/demo_overview.png)
 
 ## ✨ Features
 
