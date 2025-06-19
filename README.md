@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/yourusername/planar-reflection-system/releases)
 
-A high-performance **planar reflection system** for Godot 4.4+ designed specifically for **3D pixel art games**. Create stunning water reflections that work seamlessly with low-resolution rendering pipelines while maintaining professional visual quality.
+A high-performance **planar reflection system** for Godot 4.4+ designed specifically for **3D pixel art games**, but can be used in any game.
 
 ![Water Reflection Demo](screenshots/demo_overview.png)
 
