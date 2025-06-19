@@ -1,0 +1,307 @@
+[gd_scene load_steps=18 format=3 uid="uid://cge4mkh3rsc1r"]
+
+[ext_resource type="Script" uid="uid://bp03tdiuh1st5" path="res://addons/PlanarReflectorCpp/DemoScene/demo_scene.gd" id="1_wdduv"]
+[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="2_rsaeb"]
+[ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="3_k5kf3"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_c2an6"]
+size = Vector2(50, 50)
+subdivide_width = 10
+subdivide_depth = 10
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_wdduv"]
+viewport_path = NodePath("PlanarReflectorCPP1/@SubViewport@22662")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xt6ul"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_y4tsx"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_xt6ul")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rnerp"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8p2q0"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_rnerp")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vn44f"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sgdnf"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_vn44f")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_udttw"]
+resource_local_to_scene = true
+render_priority = -1
+shader = ExtResource("2_rsaeb")
+shader_parameter/albedo = Color(0.3, 0.6, 1, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/specular = 0.5
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_wdduv")
+shader_parameter/reflection_strength = 0.1
+shader_parameter/is_orthogonal_camera = false
+shader_parameter/ortho_uv_scale = 1.0
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_y4tsx")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_8p2q0")
+shader_parameter/normal_scale = 1.0
+shader_parameter/normal_uv_mult = 1.0
+shader_parameter/distortion_strength = 0.0
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/proximity_fade_distance = 0.0
+shader_parameter/refraction = 0.0
+shader_parameter/texture_refraction = SubResource("NoiseTexture2D_sgdnf")
+shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_03k8r"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_ugnxb"]
+sky_material = SubResource("ProceduralSkyMaterial_03k8r")
+
+[sub_resource type="Environment" id="Environment_l6cok"]
+background_mode = 2
+sky = SubResource("Sky_ugnxb")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_86h7w"]
+albedo_color = Color(0.129412, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ad0vc"]
+albedo_color = Color(1, 0.32549, 0, 1)
+
+[node name="DemoScene" type="Node3D"]
+script = ExtResource("1_wdduv")
+
+[node name="PlanarReflectorCPP1" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
+main_camera = NodePath("../CamRig/MainCamera3D")
+reflection_camera_resolution = Vector2i(640, 360)
+transform = Transform3D(0.99965, 0.026436, 0.000376986, -0.0264386, 0.999549, 0.0142539, 2.84939e-08, -0.0142589, 0.999898, 0, 0, 0)
+mesh = SubResource("PlaneMesh_c2an6")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_udttw")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_l6cok")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.107943, -0.777325, 0.619769, 0.301942, 0.619597, 0.724521, -0.947196, 0.108927, 0.301589, 0, 1.46073, 0)
+shadow_enabled = true
+
+[node name="CamRig" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.0103)
+script = ExtResource("3_k5kf3")
+move_speed = 15.0
+
+[node name="MainCamera3D" type="Camera3D" parent="CamRig"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 40.6438, 84.5759)
+fov = 18.0
+size = 20.0
+far = 100.0
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="Objects" type="Node3D" parent="."]
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 0.729481, 0.491016, 0)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.76146, 0.985645, 0)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 5.71146, 0.491016, -11.2875)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.22052, 0.985645, -11.2875)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -4.7413, 0.491016, -11.2875)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.23224, 0.985645, -11.2875)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -4.7413, 0.491016, 0.298576)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.23224, 0.985645, 0.298576)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 7.34247, 0.491016, 0.298576)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85152, 0.985645, 0.298576)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 7.34247, 0.491016, 7.5889)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85152, 0.985645, 7.5889)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -0.35064, 0.491016, 7.5889)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D7" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.84158, 0.985645, 7.5889)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -8.70777, 0.491016, 7.5889)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D8" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1987, 0.985645, 7.58872)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -8.70777, 0.491016, -4.90935)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D9" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1987, 0.985645, -4.90935)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -12.3258, 0.491016, 2.05969)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D12" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8167, 0.985645, 2.05969)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 15.9748, 0.491016, 2.05969)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D13" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4838, 0.985645, 2.05969)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 15.9748, 0.491016, 10.4737)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D14" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4838, 0.985645, 10.4737)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 15.9748, 0.491016, 17.2329)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D15" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4838, 0.985645, 17.2329)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 6.73556, 0.491016, 16.5722)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D16" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.24462, 0.985645, 16.5722)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -0.975288, 0.491016, 16.5722)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D17" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.46623, 0.985645, 16.5722)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -8.93904, 0.491016, 16.5722)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D18" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.43, 0.985645, 16.5722)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D72" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 17.0946, 0.491016, -19.5128)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D72" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6037, 0.985645, -19.5128)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D73" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 7.85542, 0.491016, -20.1735)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D73" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.36448, 0.985645, -20.1735)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D74" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 0.144569, 0.491016, -20.1735)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D74" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34637, 0.985645, -20.1735)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D75" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -7.81918, 0.491016, -20.1735)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D75" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.31012, 0.985645, -20.1735)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D76" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -16.5248, 0.491016, -20.1735)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D76" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0158, 0.985645, -20.1735)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D135" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, 0.284496, 0.491016, 18.4175)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D135" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.20644, 0.985645, 18.5319)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CSGBox3D136" type="CSGBox3D" parent="Objects"]
+transform = Transform3D(0.999923, 0, -0.0124439, 0, 1, 0, 0.0124439, 0, 0.999923, -10.1683, 0.491016, 18.4175)
+material = SubResource("StandardMaterial3D_86h7w")
+
+[node name="CSGCylinder3D136" type="CSGCylinder3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6592, 0.985645, 18.4175)
+material = SubResource("StandardMaterial3D_ad0vc")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LabelFPS" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
