@@ -31,9 +31,10 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 
 ### Method 1: Manual Installation
 1. Download the latest release code from Github
-2. Just copy the entire  `addons/` folder to your Godot res:// folder.
-3. If you already have a `addons/` folder, all you need is to paste the `PlanarReflectorCpp/` folder in there
-4. Enable the plugin in the Godot settings -> You might need to reload your project
+3. Just copy the entire  `addons/` folder to your Godot res:// folder.
+4. If you already have a `addons/` folder, all you need is to paste the `PlanarReflectorCpp/` folder in there
+5. Enable the plugin in the Godot settings -> You might need to reload your project
+6. You can download/Clone the entire Git Repo that comes with a DemoScene to see the base configuration applied
 
 ### Method 2: AssetLib (WiP - coming soon)
 
