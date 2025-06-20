@@ -1,5 +1,5 @@
-# 🌊 Godot C++ Planar Reflection System 
-![icons_reflection](https://github.com/user-attachments/assets/bc76be0d-0a7f-4f9c-a380-4860a81761ef)
+# ![icons_reflection](https://github.com/user-attachments/assets/bc76be0d-0a7f-4f9c-a380-4860a81761ef) Godot C++ Planar Reflection System 
+
 
 [![Godot Engine](https://img.shields.io/badge/Godot-4.4+-blue.svg)](https://godotengine.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
