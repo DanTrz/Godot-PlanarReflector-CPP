@@ -9,5 +9,11 @@ reloadable = true
 windows.debug.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.windows.template_debug.x86_64.dll"
 windows.release.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.windows.template_debug.x86_64.dll"
 
+linux.debug.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.linux.template_release.x86_64.so"
+
+macos.debug = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.template_debug.framework"
+macos.release = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.template_release.framework"
+
 [icons]
 PlanarReflectorCPP = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"
