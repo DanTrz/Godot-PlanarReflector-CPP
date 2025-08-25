@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bp03tdiuh1st5" path="res://addons/PlanarReflectorCpp/DemoScene/demo_scene.gd" id="1_js6cd"]
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="3_xno1t"]
-[ext_resource type="Script" uid="uid://b8h48cgpm1tm" path="res://GDScriptVersion/PlanarReflectorGDSCript.gd" id="4_tqsud"]
+[ext_resource type="Script" uid="uid://b8h48cgpm1tm" path="res://GDScriptVersion/PlanarReflectorGD.gd" id="4_tqsud"]
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="4_xno1t"]
+
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_03k8r"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)

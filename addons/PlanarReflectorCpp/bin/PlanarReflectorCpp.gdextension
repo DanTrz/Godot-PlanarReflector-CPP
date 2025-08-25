@@ -17,3 +17,4 @@ macos.release = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.te
 
 [icons]
 PlanarReflectorCPP = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"
+ReflectionEffectPrePass = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"

@@ -48,7 +48,7 @@ func _exit_tree():
 
 func _handles(object):
 	# Handle PlanarReflectorCPP nodes
-	return object is MeshInstance3D and object.has_method("get_is_active")
+	return object is MeshInstance3D and (object.has_method("get_is_active") or object.has_method("is_planar_reflector_active")) #BUG this is not good enough for a identifier of CPP class # remove the get_is_active
 
 func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 	#print("PlanarReflectorCPP Plugin: _forward_3d_gui_input detected")
@@ -97,3 +97,4 @@ func _make_visible(visible: bool):
 # Optional: Add configuration options in Project Settings
 func _get_plugin_name():
 	return PLUGIN_NAME
+

@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="1_cepju"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6yvjd"]
-viewport_path = NodePath("PlanarReflectorCPP1/editor_reflect_viewport")
+viewport_path = NodePath("PlanarReflectorCPP/@SubViewport@28861")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_psr7x"]
 seed = 10
@@ -39,7 +39,6 @@ shader_parameter/roughness = 0.5
 shader_parameter/specular = 0.5
 shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_6yvjd")
 shader_parameter/reflection_strength = 0.1
-shader_parameter/proximity_fade_distance = 0.0
 shader_parameter/is_orthogonal_camera = false
 shader_parameter/ortho_uv_scale = 1.0
 shader_parameter/texture_normal = SubResource("NoiseTexture2D_4dgxo")
@@ -49,6 +48,7 @@ shader_parameter/normal_uv_mult = 1.0
 shader_parameter/distortion_strength = 0.0
 shader_parameter/uv1_scale = Vector3(0, 0, 0)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/texture_refraction = SubResource("NoiseTexture2D_t5pnn")
+shader_parameter/proximity_fade_distance = 0.0
 shader_parameter/refraction = 0.0
+shader_parameter/texture_refraction = SubResource("NoiseTexture2D_t5pnn")
 shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
