@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="1_cepju"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6yvjd"]
-viewport_path = NodePath("PlanarReflectorCPP/@SubViewport@29835")
+viewport_path = NodePath("PlanarReflectorCPP/EditorReflectViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_psr7x"]
 seed = 10

@@ -152,16 +152,19 @@ func _notification(what):
 
 func cleanup_resources() -> void:
 	# Safely clean up compositor effects to prevent RenderingDevice errors
+	printt("[PlanarReflectorGD] Cleaning up PlanarReflectorGD resources...")
 	if reflect_camera and reflect_camera.compositor:
 		clear_compositor_reflection_effect(reflect_camera)
 	
 	# Clear references
+	printt("[PlanarReflectorGD] Clear our references inside cleanup_resources()")
 	current_reflection_effect = null
 	current_compositor = null
 	cached_material_reference = null
 
 func initial_setup() -> void:
 	# Core Setup - KEEP ORIGINAL WORKING STRUCTURE
+	printt("[PlanarReflectorGD] initial_setup() called")
 	add_to_group("planar_reflectors")
 	find_editor_helper()
 	setup_reflection_camera_and_viewport()
@@ -585,10 +588,12 @@ func update_existing_reflection_effect() -> void:
 
 func clear_compositor_reflection_effect(reflect_cam: Camera3D) -> void:
 	if reflect_cam and reflect_cam.compositor:
+		printt("[PlanarReflectorGD] Cleaning up compositor_effects..")
 		reflect_cam.compositor.compositor_effects.clear()
 		reflect_cam.compositor = null
 	
 	# Clear our references
+	printt("[PlanarReflectorGD] Clear our references inside clear_compositor_reflection_effect()")
 	current_compositor = null
 	current_reflection_effect = null
 
