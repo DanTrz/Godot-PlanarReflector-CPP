@@ -1,4 +1,7 @@
-[gd_scene load_steps=8 format=4 uid="uid://dbx0rnpliindu"]
+[gd_scene load_steps=19 format=4 uid="uid://d4dcereahrvsl"]
+
+[ext_resource type="Script" uid="uid://mf4n2svwv0p7" path="res://addons/PlanarReflectorCpp/SupportFiles/GDScriptVersion/PlanarReflectorGDScript.gd" id="1_fuksh"]
+[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="1_j6mp7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ku5ff"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -12,6 +15,59 @@ background_mode = 2
 sky = SubResource("Sky_4wmir")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ttjgy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_j6mp7"]
+viewport_path = NodePath("PlanarReflectorGDSCript/ReflectionViewPort")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i4yv5"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_glf8r"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_i4yv5")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kurgf"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_buuvk"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_kurgf")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c8hf5"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0xqmt"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_c8hf5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1onul"]
+resource_local_to_scene = true
+render_priority = -1
+shader = ExtResource("1_j6mp7")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/specular = 0.5
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_j6mp7")
+shader_parameter/reflection_strength = 0.1
+shader_parameter/is_orthogonal_camera = false
+shader_parameter/ortho_uv_scale = 1.0
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_glf8r")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_buuvk")
+shader_parameter/normal_scale = 1.0
+shader_parameter/normal_uv_mult = 1.0
+shader_parameter/distortion_strength = 0.0
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/proximity_fade_distance = 0.0
+shader_parameter/refraction = 0.0
+shader_parameter/texture_refraction = SubResource("NoiseTexture2D_0xqmt")
+shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6chu0"]
 
@@ -65,8 +121,15 @@ fov = 50.0
 size = 10.0
 far = 1000.0
 
-[node name="BlenderMonkey" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.149781, 0)
+[node name="PlanarReflectorGDSCript" type="MeshInstance3D" parent="." node_paths=PackedStringArray("main_camera")]
+mesh = SubResource("PlaneMesh_ttjgy")
+surface_material_override/0 = SubResource("ShaderMaterial_1onul")
+script = ExtResource("1_fuksh")
+main_camera = NodePath("../Camera3D")
+metadata/_custom_type_script = "uid://mf4n2svwv0p7"
+
+[node name="BlenderMonkey" type="MeshInstance3D" parent="PlanarReflectorGDSCript"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.461294, 0)
 mesh = SubResource("ArrayMesh_ijvbd")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_ku5ff")
