@@ -1,0 +1,24 @@
+[gd_resource type="Compositor" load_steps=3 format=3 uid="uid://cvhrerf6uw7tk"]
+
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_5lsne"]
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 1
+access_resolved_color = false
+access_resolved_depth = false
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_5lsne")
+effect_enabled = true
+intersect_height = 0.0
+reflect_gap_fill = 0.0025
+fill_enabled = false
+fill_radius_px = 24.0
+fill_aggressiveness = 1.0
+metadata/_custom_type_script = "uid://brsug76yttbj0"
+
+[resource]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])

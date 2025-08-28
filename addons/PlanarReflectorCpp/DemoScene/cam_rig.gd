@@ -1,7 +1,7 @@
 extends Node3D
 
 @export var move_speed: float = 4.0
-@onready var cam: Camera3D = %MainCamera3D
+@onready var cam: Camera3D = %Camera3D
 
 func _process(delta: float) -> void:
 	# movement

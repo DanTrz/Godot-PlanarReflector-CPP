@@ -1,6 +1,7 @@
+
+#GDScript version 
 @tool
 extends MeshInstance3D
-class_name PlanarReflectorGDSCript
 
 var reflect_camera: Camera3D
 var reflect_viewport: SubViewport
