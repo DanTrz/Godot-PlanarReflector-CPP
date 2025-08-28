@@ -4,7 +4,7 @@ extends EditorPlugin
 const PLUGIN_NAME = "PlanarReflectorCPP"
 const EDITOR_HELPER_NAME = "PlanarReflectorEditorHelper"
 
-const editor_camera_helper_path:String = "res://addons/PlanarReflectorCpp/editor_camera_helper.gd"
+const planar_editor_helper_path:String = "res://addons/PlanarReflectorCpp/planar_reflector_editor_helper.gd"
 const icon_path:String = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"
 
 var editor_camera_helper:Node
@@ -14,7 +14,7 @@ func _enter_tree():
 	#print("PlanarReflectorCPP Plugin: Entering tree")
 	
 	# Create and add the editor camera helper as a singleton
-	editor_camera_helper = load(editor_camera_helper_path).new()
+	editor_camera_helper = load(planar_editor_helper_path).new()
 	editor_camera_helper.name = EDITOR_HELPER_NAME
 	
 	# Add to editor's scene root so it persists
@@ -56,6 +56,7 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 	# update_editor_camera(viewport_camera)
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 
+#Recent active version to call planar reflectors nodes and set the camera
 func update_editor_camera_new(viewport_camera: Camera3D):
 	if editor_camera_helper:
 		editor_camera_helper.set_helper_editor_camera(viewport_camera)
@@ -70,7 +71,7 @@ func update_editor_camera_new(viewport_camera: Camera3D):
 					node.set_editor_camera(viewport_camera)
 					#print("PlanarReflectorCPP Plugin: set_editor_camera to: " + viewport_camera.name + " on: " + node.name)
 
-#BAKRUP VERSION
+#BAKRUP VERSION NOT IN USE
 func update_editor_camera(viewport_camera: Camera3D):
 	if viewport_camera and viewport_camera != current_editor_camera:
 		current_editor_camera = viewport_camera
