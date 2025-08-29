@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://bxce7m4enwcg6"]
+[gd_scene load_steps=22 format=4 uid="uid://bxce7m4enwcg6"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_4wmir"]
 [ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_q65ek"]
@@ -29,6 +29,9 @@ compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4o
 size = Vector2(4, 4)
 subdivide_width = 4
 subdivide_depth = 4
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4wmir"]
+viewport_path = NodePath("BasePlanarReflectorCPP/ReflectionViewPort")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4wmir"]
 seed = 10
@@ -62,6 +65,7 @@ shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.5
 shader_parameter/specular = 0.5
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_4wmir")
 shader_parameter/reflection_strength = 0.1
 shader_parameter/is_orthogonal_camera = false
 shader_parameter/ortho_uv_scale = 1.0
@@ -129,21 +133,12 @@ albedo_color = Color(0.351972, 0.636277, 5.77569e-07, 1)
 
 [node name="demo_scene_planar_cpp" type="Node3D"]
 
-[node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="."]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
+[node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
+main_camera = NodePath("../Camera3D")
 active_compositor = SubResource("Compositor_q65ek")
 reflection_offset_position = Vector3(-1, 0, 0)
 mesh = SubResource("PlaneMesh_q65ek")
 surface_material_override/0 = SubResource("ShaderMaterial_74uhr")
-script = null
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_q65ek")
