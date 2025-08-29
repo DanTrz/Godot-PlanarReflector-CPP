@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://ctnyu7crkasft"]
+[gd_scene load_steps=23 format=3 uid="uid://ctnyu7crkasft"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_2dtw1"]
 [ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="2_2dtw1"]
@@ -46,8 +46,8 @@ shader = ExtResource("3_u4t1n")
 shader_parameter/depth_gradient_shallow = Color(0.325, 0.807, 0.971, 0.725)
 shader_parameter/depth_gradient_deep = Color(0.086, 0.407, 1, 0.749)
 shader_parameter/depth_max_distance = 1.0
-shader_parameter/depth_factor = 1.2
-shader_parameter/beer_factor = 1.5
+shader_parameter/depth_factor = 1.0
+shader_parameter/beer_factor = 1.0
 shader_parameter/foam_color = Color(1, 1, 1, 1)
 shader_parameter/foam_distance = 0.01
 shader_parameter/foam_max_distance = 0.2
@@ -65,8 +65,8 @@ shader_parameter/wave_animation_speed = 0.5
 shader_parameter/reflection_wobble_speed = 1.0
 shader_parameter/foam_animation_speed = 1.0
 shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_2dtw1")
-shader_parameter/reflection_strength = 1.2
-shader_parameter/reflection_on_top = true
+shader_parameter/reflection_strength = 1.0
+shader_parameter/reflection_on_top = false
 shader_parameter/is_orthogonal_camera = false
 shader_parameter/ortho_uv_scale = 1.0
 shader_parameter/reflection_distortion_scale = 1.0
@@ -101,10 +101,13 @@ albedo_color = Color(0.503072, 0.601522, 0.701143, 1)
 [sub_resource type="CylinderMesh" id="CylinderMesh_2dtw1"]
 top_radius = 0.2
 bottom_radius = 0.2
-height = 0.6
+height = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1j7kg"]
 albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h1hjx"]
+albedo_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lfoe"]
 albedo_color = Color(1, 0, 1, 1)
@@ -119,8 +122,7 @@ size = Vector2(4, 4)
 
 [node name="demo_scene_planar_cpp" type="Node3D"]
 
-[node name="WaterPlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
-main_camera = NodePath("../Camera3D")
+[node name="WaterPlanarReflectorCPP" type="PlanarReflectorCPP" parent="."]
 active_compositor = SubResource("Compositor_1j7kg")
 mesh = SubResource("PlaneMesh_0lfoe")
 surface_material_override/0 = SubResource("ShaderMaterial_radhy")
@@ -135,7 +137,6 @@ shadow_enabled = true
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1.2, 2.13557)
-visible = false
 size = 10.0
 script = ExtResource("1_2dtw1")
 
@@ -164,18 +165,25 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_u4t1n")
 
 [node name="Cylinders" type="Node3D" parent="Objects"]
-transform = Transform3D(0.806919, 0.885993, -1.02541e-08, -0.505109, 1.03506, -0.51837, -0.306182, 0.627424, 0.855156, 0.0329142, 0.0638797, 0.0854616)
+transform = Transform3D(0.895425, 0.667819, 0, -0.432598, 1.30508, -0.236363, -0.105232, 0.317468, 0.971664, 0.0329142, -0.553653, 0.0854616)
 metadata/_edit_group_ = true
 
 [node name="CylinderYellow" type="MeshInstance3D" parent="Objects/Cylinders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.333734, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.731764, 0)
 mesh = SubResource("CylinderMesh_2dtw1")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_1j7kg")
 metadata/_edit_lock_ = true
 
+[node name="CylinderGreen" type="MeshInstance3D" parent="Objects/Cylinders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.333734, 0)
+mesh = SubResource("CylinderMesh_2dtw1")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_h1hjx")
+metadata/_edit_lock_ = true
+
 [node name="CylinderPink" type="MeshInstance3D" parent="Objects/Cylinders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.275749, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0657387, 0)
 mesh = SubResource("CylinderMesh_2dtw1")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_0lfoe")

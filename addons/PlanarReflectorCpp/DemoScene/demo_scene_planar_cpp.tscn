@@ -129,12 +129,21 @@ albedo_color = Color(0.351972, 0.636277, 5.77569e-07, 1)
 
 [node name="demo_scene_planar_cpp" type="Node3D"]
 
-[node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
-main_camera = NodePath("../Camera3D")
+[node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 active_compositor = SubResource("Compositor_q65ek")
 reflection_offset_position = Vector3(-1, 0, 0)
 mesh = SubResource("PlaneMesh_q65ek")
 surface_material_override/0 = SubResource("ShaderMaterial_74uhr")
+script = null
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_q65ek")
