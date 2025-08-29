@@ -18,6 +18,8 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 - **Dual rendering system** - Separate game and editor modes
 - **Layer-based filtering** - Control what objects appear in reflections
 - **Custom environments** - Independent lighting for reflected scenes
+- **Version 1.0.1 brings Compositor Effect to hide/mask objects intersecting with PlanarReflector (like underwater objects).
+- **C++ version Binaries available for MacOS, Windows and Linux. (GDScript version also included, but required adding Script to a MeshInstance3D manually)
 
 ### 🎮 **Reflection & Performance Features**
 - **Camera mode detection** - Automatic perspective/orthographic handling
