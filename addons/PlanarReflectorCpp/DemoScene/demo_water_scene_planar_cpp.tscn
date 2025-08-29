@@ -30,17 +30,17 @@ size = Vector2(4, 4)
 subdivide_width = 4
 subdivide_depth = 4
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1hjx"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2dtw1"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_2dtw1"]
 viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_gil24"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_u4t1n"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vd8om"]
-noise = SubResource("FastNoiseLite_gil24")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1j7kg"]
+noise = SubResource("FastNoiseLite_u4t1n")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_radhy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lfoe"]
 render_priority = 0
 shader = ExtResource("3_u4t1n")
 shader_parameter/depth_gradient_shallow = Color(0.325, 0.807, 0.971, 0.725)
@@ -52,8 +52,8 @@ shader_parameter/foam_color = Color(1, 1, 1, 1)
 shader_parameter/foam_distance = 0.01
 shader_parameter/foam_max_distance = 0.2
 shader_parameter/foam_min_distance = 0.04
-shader_parameter/surface_noise = SubResource("NoiseTexture2D_vd8om")
-shader_parameter/distort_noise = SubResource("NoiseTexture2D_h1hjx")
+shader_parameter/surface_noise = SubResource("NoiseTexture2D_1j7kg")
+shader_parameter/distort_noise = SubResource("NoiseTexture2D_2dtw1")
 shader_parameter/surface_noise_tiling = Vector2(2, 8)
 shader_parameter/surface_noise_scroll = Vector3(0.03, 0.03, 0)
 shader_parameter/surface_noise_cutoff = 0.75
@@ -123,7 +123,7 @@ size = Vector2(4, 4)
 main_camera = NodePath("../Camera3D")
 active_compositor = SubResource("Compositor_1j7kg")
 mesh = SubResource("PlaneMesh_0lfoe")
-surface_material_override/0 = SubResource("ShaderMaterial_radhy")
+surface_material_override/0 = SubResource("ShaderMaterial_0lfoe")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_q65ek")

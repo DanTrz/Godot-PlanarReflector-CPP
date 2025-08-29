@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://bxce7m4enwcg6"]
+[gd_scene load_steps=21 format=4 uid="uid://bxce7m4enwcg6"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_4wmir"]
 [ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_q65ek"]
@@ -80,9 +80,6 @@ size = Vector2(4, 4)
 subdivide_width = 4
 subdivide_depth = 4
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_4wmir"]
-viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
-
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4wmir"]
 seed = 10
 
@@ -115,7 +112,6 @@ shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.5
 shader_parameter/specular = 0.5
-shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_4wmir")
 shader_parameter/reflection_strength = 0.1
 shader_parameter/is_orthogonal_camera = false
 shader_parameter/ortho_uv_scale = 1.0
