@@ -54,5 +54,7 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 
 ## 🔧 Technical Constraints
 - **Planar surfaces only** - Works best with flat surfaces
-- **No "below surface" object filtering** - It will show reflection of "underwater" elements for example. To workaround this, use cull-masks to ignore these objects.
+- **Hide objects intersecting with Planar Reflector is EXPERIMENTAL (Alpha stage) working with Compositor Effects. This means you can now hide underwater objects, for example. When available, I will update to the new solution explained here:https://github.com/DanTrz/Godot-PlanarReflector-CPP/issues/1
 - **Requires Plugin enabled for editor** - To see reflections in the Editor the plugin must be active
+
+Full CPP Code here: https://github.com/DanTrz/PlanarReflector-GDExtension-FullCPPProject 
