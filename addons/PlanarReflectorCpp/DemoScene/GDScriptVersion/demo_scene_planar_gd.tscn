@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=4 uid="uid://d4dcereahrvsl"]
 
-[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="1_7gmbh"]
+[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_base.gdshader" id="1_7gmbh"]
 [ext_resource type="Script" uid="uid://mf4n2svwv0p7" path="res://addons/PlanarReflectorCpp/DemoScene/GDScriptVersion/PlanarReflectorGDScript.gd" id="2_x01h2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ku5ff"]

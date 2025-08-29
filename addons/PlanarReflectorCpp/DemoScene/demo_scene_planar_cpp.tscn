@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_4wmir"]
 [ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_q65ek"]
-[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/planar_reflection_base.gdshader" id="2_ku5ff"]
+[ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_base.gdshader" id="2_ku5ff"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_500ed"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -76,9 +76,12 @@ metadata/_custom_type_script = "uid://brsug76yttbj0"
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_q65ek"]
+size = Vector2(4, 4)
+subdivide_width = 4
+subdivide_depth = 4
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_4wmir"]
-viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort_3255097246144")
+viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4wmir"]
 seed = 10

@@ -1,0 +1,49 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://dlreytnsy7ya2"]
+
+[ext_resource type="Shader" uid="uid://d321f1550xwkn" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/water_planar_toon_compositor_mask.gdshader" id="1_7s6o5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2dtw1"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ye4h1"]
+viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1j7kg"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0lfoe"]
+noise = SubResource("FastNoiseLite_1j7kg")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_7s6o5")
+shader_parameter/depth_gradient_shallow = Color(0.325, 0.807, 0.971, 0.725)
+shader_parameter/depth_gradient_deep = Color(0.086, 0.407, 1, 0.749)
+shader_parameter/depth_max_distance = 1.0
+shader_parameter/depth_factor = 1.2
+shader_parameter/beer_factor = 1.5
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/foam_distance = 0.01
+shader_parameter/foam_max_distance = 0.2
+shader_parameter/foam_min_distance = 0.04
+shader_parameter/surface_noise = SubResource("NoiseTexture2D_0lfoe")
+shader_parameter/distort_noise = SubResource("NoiseTexture2D_2dtw1")
+shader_parameter/surface_noise_tiling = Vector2(2, 8)
+shader_parameter/surface_noise_scroll = Vector3(0.03, 0.03, 0)
+shader_parameter/surface_noise_cutoff = 0.75
+shader_parameter/surface_distortion_amount = 0.2
+shader_parameter/roughness = 1.0
+shader_parameter/specular = 1.0
+shader_parameter/master_time_scale = 0.5
+shader_parameter/wave_animation_speed = 0.5
+shader_parameter/reflection_wobble_speed = 1.0
+shader_parameter/foam_animation_speed = 1.0
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_ye4h1")
+shader_parameter/reflection_strength = 1.2
+shader_parameter/reflection_on_top = true
+shader_parameter/is_orthogonal_camera = false
+shader_parameter/ortho_uv_scale = 1.0
+shader_parameter/reflection_distortion_scale = 1.0
+shader_parameter/enable_reflection_depth_mask = false
+shader_parameter/reflection_depth_threshold = 0.1
+shader_parameter/reflection_depth_fade = 0.25
+shader_parameter/ortho_depth_scale = 1.0
+shader_parameter/ortho_foam_compensation = 1.0

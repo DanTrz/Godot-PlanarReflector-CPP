@@ -1,0 +1,187 @@
+[gd_scene load_steps=22 format=3 uid="uid://ctnyu7crkasft"]
+
+[ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_2dtw1"]
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="2_2dtw1"]
+[ext_resource type="Shader" uid="uid://d321f1550xwkn" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/water_planar_toon_compositor_mask.gdshader" id="3_u4t1n"]
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 1
+access_resolved_color = false
+access_resolved_depth = false
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_2dtw1")
+effect_enabled = true
+intersect_height = 0.0
+reflect_gap_fill = 0.0025
+fill_enabled = false
+fill_radius_px = 24.0
+fill_aggressiveness = 1.0
+metadata/_custom_type_script = "uid://brsug76yttbj0"
+
+[sub_resource type="Compositor" id="Compositor_1j7kg"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0lfoe"]
+size = Vector2(4, 4)
+subdivide_width = 4
+subdivide_depth = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1hjx"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2dtw1"]
+viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gil24"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vd8om"]
+noise = SubResource("FastNoiseLite_gil24")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_radhy"]
+render_priority = 0
+shader = ExtResource("3_u4t1n")
+shader_parameter/depth_gradient_shallow = Color(0.325, 0.807, 0.971, 0.725)
+shader_parameter/depth_gradient_deep = Color(0.086, 0.407, 1, 0.749)
+shader_parameter/depth_max_distance = 1.0
+shader_parameter/depth_factor = 1.2
+shader_parameter/beer_factor = 1.5
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/foam_distance = 0.01
+shader_parameter/foam_max_distance = 0.2
+shader_parameter/foam_min_distance = 0.04
+shader_parameter/surface_noise = SubResource("NoiseTexture2D_vd8om")
+shader_parameter/distort_noise = SubResource("NoiseTexture2D_h1hjx")
+shader_parameter/surface_noise_tiling = Vector2(2, 8)
+shader_parameter/surface_noise_scroll = Vector3(0.03, 0.03, 0)
+shader_parameter/surface_noise_cutoff = 0.75
+shader_parameter/surface_distortion_amount = 0.2
+shader_parameter/roughness = 1.0
+shader_parameter/specular = 1.0
+shader_parameter/master_time_scale = 0.5
+shader_parameter/wave_animation_speed = 0.5
+shader_parameter/reflection_wobble_speed = 1.0
+shader_parameter/foam_animation_speed = 1.0
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_2dtw1")
+shader_parameter/reflection_strength = 1.2
+shader_parameter/reflection_on_top = true
+shader_parameter/is_orthogonal_camera = false
+shader_parameter/ortho_uv_scale = 1.0
+shader_parameter/reflection_distortion_scale = 1.0
+shader_parameter/enable_reflection_depth_mask = false
+shader_parameter/reflection_depth_threshold = 0.1
+shader_parameter/reflection_depth_fade = 0.25
+shader_parameter/ortho_depth_scale = 1.0
+shader_parameter/ortho_foam_compensation = 1.0
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_500ed"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_4wmir"]
+sky_material = SubResource("ProceduralSkyMaterial_500ed")
+
+[sub_resource type="Environment" id="Environment_q65ek"]
+background_mode = 2
+sky = SubResource("Sky_4wmir")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_2dtw1"]
+size = Vector3(0.2, 1, 4.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u4t1n"]
+shading_mode = 2
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.503072, 0.601522, 0.701143, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2dtw1"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1j7kg"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lfoe"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2dtw1"]
+shading_mode = 0
+albedo_color = Color(0.301961, 0.635294, 0.835294, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u4t1n"]
+material = SubResource("StandardMaterial3D_2dtw1")
+size = Vector2(4, 4)
+
+[node name="demo_scene_planar_cpp" type="Node3D"]
+
+[node name="PlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
+main_camera = NodePath("../Camera3D")
+active_compositor = SubResource("Compositor_1j7kg")
+mesh = SubResource("PlaneMesh_0lfoe")
+surface_material_override/0 = SubResource("ShaderMaterial_radhy")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_q65ek")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.809237, -0.226548, 0.542044, 0.574742, -0.496401, 0.650582, 0.121683, 0.838011, 0.531913, 0, 0.722136, -0.0144936)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1.2, 2.13557)
+visible = false
+size = 10.0
+script = ExtResource("1_2dtw1")
+
+[node name="Objects" type="Node3D" parent="."]
+
+[node name="SwimmingPool" type="Node3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0610964, 0)
+metadata/_edit_group_ = true
+
+[node name="Wall" type="MeshInstance3D" parent="Objects/SwimmingPool"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.00078, -0.279114, 0)
+mesh = SubResource("BoxMesh_2dtw1")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_u4t1n")
+
+[node name="Wall2" type="MeshInstance3D" parent="Objects/SwimmingPool"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.0168118, -0.279114, -2.00977)
+mesh = SubResource("BoxMesh_2dtw1")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_u4t1n")
+
+[node name="Wall4" type="MeshInstance3D" parent="Objects/SwimmingPool"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.03441, -0.279114, 0)
+mesh = SubResource("BoxMesh_2dtw1")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_u4t1n")
+
+[node name="Cylinders" type="Node3D" parent="Objects"]
+transform = Transform3D(0.806919, 0.885993, -1.02541e-08, -0.505109, 1.03506, -0.51837, -0.306182, 0.627424, 0.855156, 0.0329142, 0.0638797, 0.0854616)
+metadata/_edit_group_ = true
+
+[node name="CylinderYellow" type="MeshInstance3D" parent="Objects/Cylinders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.333734, 0)
+mesh = SubResource("CylinderMesh_2dtw1")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_1j7kg")
+metadata/_edit_lock_ = true
+
+[node name="CylinderPink" type="MeshInstance3D" parent="Objects/Cylinders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.275749, 0)
+mesh = SubResource("CylinderMesh_2dtw1")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_0lfoe")
+metadata/_edit_lock_ = true
+
+[node name="WaterlFloor" type="MeshInstance3D" parent="Objects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.727946, 0)
+mesh = SubResource("PlaneMesh_u4t1n")
+skeleton = NodePath("../..")

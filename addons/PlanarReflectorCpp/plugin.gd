@@ -51,7 +51,7 @@ func _handles(object):
 	return object is MeshInstance3D and (object.has_method("get_is_active") or object.has_method("is_planar_reflector_active")) #BUG this is not good enough for a identifier of CPP class # remove the get_is_active
 
 func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
-	#print("PlanarReflectorCPP Plugin: _forward_3d_gui_input detected")
+	# print("PlanarReflectorCPP Plugin: _forward_3d_gui_input detected")
 	update_editor_camera_new(viewport_camera)
 	# update_editor_camera(viewport_camera)
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
@@ -62,14 +62,15 @@ func update_editor_camera_new(viewport_camera: Camera3D):
 		editor_camera_helper.set_helper_editor_camera(viewport_camera)
 	
 	var nodes = get_tree().get_nodes_in_group("planar_reflectors")
-	#print("PlanarReflectorCPP Plugin: nodes found in planar_reflectors = " + str(nodes.size()))
+	# print("PlanarReflectorCPP Plugin: nodes found in planar_reflectors = " + str(nodes.size()))
 	for node in nodes:
 		if node.has_method("set_editor_camera"):
 			if node.has_method("get_active_camera"):
 				var active_planar_reflector_camera = node.get_active_camera() # Gets avtive camera from ecah PlanarReflectorCPP nodes
+				# node.set_editor_camera(viewport_camera)
 				if active_planar_reflector_camera != viewport_camera:
 					node.set_editor_camera(viewport_camera)
-					#print("PlanarReflectorCPP Plugin: set_editor_camera to: " + viewport_camera.name + " on: " + node.name)
+					# print("[PlanarReflectorCPP Plugin] : set_editor_camera to: " + viewport_camera.name + " on: " + node.name)
 
 #BAKRUP VERSION NOT IN USE
 func update_editor_camera(viewport_camera: Camera3D):
