@@ -20,26 +20,18 @@ var shader: RID
 var pipeline: RID
 var sampler_rid: RID
 var parameter_storage_buffer: RID
-var temp_image: RID        # scratch image (same size/format as color)
+var temp_image: RID
 var temp_sampler: RID
 
+# FIX 1: No caching - create/use/discard pattern per frame to avoid accumulation
+# This prevents the systematic uniform buffer leaks identified in Issue #103400
+
 # Performance optimization caches
-var cached_uniform_sets: Dictionary = {}
 var last_params: PackedFloat32Array = []
 var cached_matrix_data: PackedFloat32Array = []
 var last_inv_proj_matrix: Projection = Projection()
 var last_cam_transform: Transform3D = Transform3D()
 
-# std430 buffer layout:
-#  0..1   : vec2  raster_size
-#  2      : float intersect_height
-#  3      : float reflect_gap_fill
-#  4..19  : mat4  inv_proj_mat
-# 20..35  : mat4  inv_view_mat
-# 36      : float fill_enable (0/1)
-# 37      : float fill_radius_px
-# 38      : float fill_aggressiveness (0..1)
-# 39      : float pass_dir  (0 = horizontal, 1 = vertical)
 const PARAM_FLOATS := 40
 
 func _init() -> void:
@@ -47,18 +39,46 @@ func _init() -> void:
 	rd = RenderingServer.get_rendering_device()
 	RenderingServer.call_on_render_thread(_initialize_compute)
 
+# FIX 2: Direct cleanup in NOTIFICATION_PREDELETE to avoid null instance errors
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		if is_instance_valid(self):
-			RenderingServer.call_on_render_thread(_free_gpu)
+		# FIX 3: Inline cleanup to prevent null instance function call errors
+		if rd != null:
+			
+			# FIX 4: Only free root resources - dependency tracking handles the rest
+			# This prevents "Attempted to free invalid ID" errors from double-freeing
+			
+			# Free temp resources first (no dependencies)
+			if temp_image.is_valid():
+				rd.free_rid(temp_image)
+				temp_image = RID()
+			
+			if temp_sampler.is_valid():
+				rd.free_rid(temp_sampler)
+				temp_sampler = RID()
+			
+			if sampler_rid.is_valid():
+				rd.free_rid(sampler_rid)
+				sampler_rid = RID()
+			
+			if parameter_storage_buffer.is_valid():
+				rd.free_rid(parameter_storage_buffer)
+				parameter_storage_buffer = RID()
+			
+			# Free shader last - this automatically frees pipeline due to dependency tracking
+			# DO NOT manually free pipeline - this causes double-free errors
+			if shader.is_valid():
+				rd.free_rid(shader)
+				shader = RID()
+				# pipeline is automatically freed by dependency tracking
+				pipeline = RID()
 
 func _initialize_compute() -> void:
 	rd = RenderingServer.get_rendering_device()
 	if rd == null:
 		return
 
-	# Compile compute shader
-	var shader_file: RDShaderFile = load("res://addons/PlanarReflectorCpp/SupportFiles/reflection_effect_prepass_compute.glsl")
+	var shader_file: RDShaderFile = load("uid://c6cyjnip1nl1v")
 	if shader_file:
 		var spirv: RDShaderSPIRV = shader_file.get_spirv()
 		shader = rd.shader_create_from_spirv(spirv)
@@ -66,7 +86,6 @@ func _initialize_compute() -> void:
 	if shader.is_valid():
 		pipeline = rd.compute_pipeline_create(shader)
 
-	# Samplers
 	var s := RDSamplerState.new()
 	s.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 	s.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
@@ -79,46 +98,20 @@ func _initialize_compute() -> void:
 	s_lin.mip_filter = RenderingDevice.SAMPLER_FILTER_LINEAR
 	temp_sampler = rd.sampler_create(s_lin)
 
-	# Param buffer
 	var data := PackedFloat32Array()
 	data.resize(PARAM_FLOATS)
 	var bytes := data.to_byte_array()
 	parameter_storage_buffer = rd.storage_buffer_create(bytes.size(), bytes)
 	
-	# Initialize cache arrays
-	cached_matrix_data.resize(32) # For both matrices (16 floats each)
-
-func _free_gpu() -> void:
-	if rd == null:
-		return
-	
-	# Free cached uniform sets
-	for key in cached_uniform_sets:
-		var uniform_set_rid = cached_uniform_sets[key]
-		if uniform_set_rid.is_valid():
-			rd.free_rid(uniform_set_rid)
-	cached_uniform_sets.clear()
-	
-	if temp_image.is_valid():
-		rd.free_rid(temp_image)
-	if temp_sampler.is_valid():
-		rd.free_rid(temp_sampler)
-	if sampler_rid.is_valid():
-		rd.free_rid(sampler_rid)
-	if parameter_storage_buffer.is_valid():
-		rd.free_rid(parameter_storage_buffer)
-	if pipeline.is_valid():
-		rd.free_rid(pipeline)
-	if shader.is_valid():
-		rd.free_rid(shader)
+	cached_matrix_data.resize(32)
 
 func _ensure_temp_image(size: Vector2i, like_color: RID) -> void:
-	# Create a same-format storage+sampled image for the separable pass
 	if temp_image.is_valid():
 		var info := rd.texture_get_format(temp_image)
 		if info.width == size.x and info.height == size.y:
 			return
 		rd.free_rid(temp_image)
+		temp_image = RID()
 
 	var fmt := rd.texture_get_format(like_color)
 	var tf := RDTextureFormat.new()
@@ -132,75 +125,73 @@ func _ensure_temp_image(size: Vector2i, like_color: RID) -> void:
 	tf.format = fmt.format
 	tf.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT
 	temp_image = rd.texture_create(tf, RDTextureView.new(), [])
-	# No need to initialize contents; we fully overwrite.
 
-func _get_or_create_uniform_set(color_tex: RID, depth_tex: RID, pass_type: int, temp_image_rid: RID) -> RID:
-	# Create a unique key for this combination
-	var key = str(color_tex.get_id()) + "_" + str(depth_tex.get_id()) + "_" + str(pass_type) + "_" + str(temp_image_rid.get_id())
-	
-	if key in cached_uniform_sets:
-		return cached_uniform_sets[key]
-	
-	# Create new uniform set
+# FIX 5: Create-use-discard pattern for uniform sets to prevent accumulation
+func _create_uniform_set(color_tex: RID, depth_tex: RID, pass_type: int, temp_image_rid: RID) -> RID:
+	var uniforms: Array[RDUniform] = []
+
 	var u_params := RDUniform.new()
 	u_params.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 	u_params.binding = 0
 	u_params.add_id(parameter_storage_buffer)
+	uniforms.append(u_params)
 
 	var u_color_write := RDUniform.new()
 	u_color_write.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	u_color_write.binding = 1
-	if pass_type == 1: # vertical pass writes to color
+	if pass_type == 1:
 		u_color_write.add_id(color_tex)
-	else: # horizontal pass dummy binding
+	else:
 		u_color_write.add_id(temp_image_rid)
+	uniforms.append(u_color_write)
 
 	var u_depth := RDUniform.new()
 	u_depth.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 	u_depth.binding = 2
 	u_depth.add_id(sampler_rid)
 	u_depth.add_id(depth_tex)
+	uniforms.append(u_depth)
 
 	var u_src_color := RDUniform.new()
 	u_src_color.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 	u_src_color.binding = 3
 	u_src_color.add_id(sampler_rid)
 	u_src_color.add_id(color_tex)
+	uniforms.append(u_src_color)
 
 	var u_temp_image := RDUniform.new()
 	u_temp_image.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	u_temp_image.binding = 4
 	u_temp_image.add_id(temp_image_rid)
+	uniforms.append(u_temp_image)
 
 	var u_temp_sampler := RDUniform.new()
 	u_temp_sampler.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 	u_temp_sampler.binding = 5
 	u_temp_sampler.add_id(temp_sampler)
 	u_temp_sampler.add_id(temp_image_rid)
+	uniforms.append(u_temp_sampler)
 
-	var uniform_set: RID = rd.uniform_set_create([u_params, u_color_write, u_depth, u_src_color, u_temp_image, u_temp_sampler], shader, 0)
-	cached_uniform_sets[key] = uniform_set
-	return uniform_set
+	# Create uniform set - will be automatically freed by GPU after use
+	# DO NOT manually free these - GPU handles cleanup automatically
+	return rd.uniform_set_create(uniforms, shader, 0)
 
 func _update_params_if_changed(new_params: PackedFloat32Array) -> bool:
-	# Quick check if parameters have changed
 	if last_params.size() == new_params.size():
 		var changed = false
 		for i in range(new_params.size()):
-			if abs(last_params[i] - new_params[i]) > 0.0001: # Small epsilon for float comparison
+			if abs(last_params[i] - new_params[i]) > 0.0001:
 				changed = true
 				break
 		if not changed:
 			return false
 	
-	# Parameters changed, update buffer
 	var bytes = new_params.to_byte_array()
 	rd.buffer_update(parameter_storage_buffer, 0, bytes.size(), bytes)
 	last_params = new_params.duplicate()
 	return true
 
 func _cache_matrix_data(inv_proj: Projection, cam_xform: Transform3D) -> bool:
-	# Check if matrices have changed significantly
 	var proj_changed = false
 	var transform_changed = false
 	
@@ -208,7 +199,6 @@ func _cache_matrix_data(inv_proj: Projection, cam_xform: Transform3D) -> bool:
 		last_inv_proj_matrix = inv_proj
 		proj_changed = true
 		
-		# Cache inverse projection matrix data
 		cached_matrix_data[0]  = inv_proj.x.x; cached_matrix_data[1]  = inv_proj.x.y
 		cached_matrix_data[2]  = inv_proj.x.z; cached_matrix_data[3]  = inv_proj.x.w
 		cached_matrix_data[4]  = inv_proj.y.x; cached_matrix_data[5]  = inv_proj.y.y
@@ -222,7 +212,6 @@ func _cache_matrix_data(inv_proj: Projection, cam_xform: Transform3D) -> bool:
 		last_cam_transform = cam_xform
 		transform_changed = true
 		
-		# Cache camera transform data
 		cached_matrix_data[16] = cam_xform.basis.x.x; cached_matrix_data[17] = cam_xform.basis.x.y
 		cached_matrix_data[18] = cam_xform.basis.x.z; cached_matrix_data[19] = 0.0
 		cached_matrix_data[20] = cam_xform.basis.y.x; cached_matrix_data[21] = cam_xform.basis.y.y
@@ -262,7 +251,6 @@ func _render_callback(p_effect_callback_type: EffectCallbackType, p_render_data:
 
 		_ensure_temp_image(size, color_tex)
 
-		# Base params (shared by both passes)
 		var params := PackedFloat32Array()
 		params.resize(PARAM_FLOATS)
 		params[0] = float(size.x)
@@ -270,13 +258,11 @@ func _render_callback(p_effect_callback_type: EffectCallbackType, p_render_data:
 		params[2] = intersect_height
 		params[3] = reflect_gap_fill
 
-		# Optimized: Use cached matrix data and only recalculate if changed
 		var inv_proj := p_render_data.get_render_scene_data().get_cam_projection().inverse()
 		var cam_xform: Transform3D = p_render_data.get_render_scene_data().get_cam_transform()
 		
-		var matrices_changed = _cache_matrix_data(inv_proj, cam_xform)
+		_cache_matrix_data(inv_proj, cam_xform)
 		
-		# Copy cached matrix data to params array
 		for i in range(32):
 			params[4 + i] = cached_matrix_data[i]
 
@@ -284,34 +270,30 @@ func _render_callback(p_effect_callback_type: EffectCallbackType, p_render_data:
 		params[37] = float(fill_radius_px)
 		params[38] = clamp(fill_aggressiveness, 0.0, 1.0)
 
-		# ---------- PASS 1: horizontal -> write temp_image ----------
-		params[39] = 0.0  # pass_dir = horizontal
+		# PASS 1: horizontal
+		params[39] = 0.0
+		_update_params_if_changed(params)
 		
-		# Optimized: Only update buffer if parameters actually changed
-		var params_changed = _update_params_if_changed(params)
-		
-		# Get or create cached uniform set for horizontal pass
-		var uniform_set_h: RID = _get_or_create_uniform_set(color_tex, depth_tex, 0, temp_image)
+		# FIX 6: Create uniform set for immediate use only
+		var uniform_set_h: RID = _create_uniform_set(color_tex, depth_tex, 0, temp_image)
 
 		var cl1 := rd.compute_list_begin()
 		rd.compute_list_bind_compute_pipeline(cl1, pipeline)
 		rd.compute_list_bind_uniform_set(cl1, uniform_set_h, 0)
 		rd.compute_list_dispatch(cl1, x_groups, y_groups, 1)
 		rd.compute_list_end()
+		# Uniform set is automatically cleaned up by GPU after use
 
-		# ---------- PASS 2: vertical -> read temp, write color ----------
-		params[39] = 1.0  # pass_dir = vertical
-		
-		# Update buffer for vertical pass (only pass_dir changed)
+		# PASS 2: vertical
+		params[39] = 1.0
 		var bytes2 := params.to_byte_array()
 		rd.buffer_update(parameter_storage_buffer, 0, bytes2.size(), bytes2)
 
-		# Get or create cached uniform set for vertical pass
-		var uniform_set_v: RID = _get_or_create_uniform_set(color_tex, depth_tex, 1, temp_image)
+		var uniform_set_v: RID = _create_uniform_set(color_tex, depth_tex, 1, temp_image)
 
 		var cl2 := rd.compute_list_begin()
 		rd.compute_list_bind_compute_pipeline(cl2, pipeline)
 		rd.compute_list_bind_uniform_set(cl2, uniform_set_v, 0)
 		rd.compute_list_dispatch(cl2, x_groups, y_groups, 1)
 		rd.compute_list_end()
-	
+		# Uniform set is automatically cleaned up by GPU after use

@@ -13,7 +13,6 @@ config_version=5
 config/name="PlanarReflector-CPP"
 run/main_scene="uid://bxce7m4enwcg6"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
 
 [display]
 

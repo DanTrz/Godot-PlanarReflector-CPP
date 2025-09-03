@@ -122,12 +122,13 @@ size = 10.0
 far = 1000.0
 
 [node name="BlenderMonkey" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.461294, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.667933, -0.677019)
 mesh = SubResource("ArrayMesh_ijvbd")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_ku5ff")
 
 [node name="PlanarReflectorGDSCript" type="MeshInstance3D" parent="." node_paths=PackedStringArray("main_camera")]
+transform = Transform3D(1, 0, 0, 0, 0.987089, -0.160174, 0, 0.160174, 0.987089, 0, 0, 0)
 mesh = SubResource("PlaneMesh_7vhju")
 surface_material_override/0 = SubResource("ShaderMaterial_6pais")
 script = ExtResource("2_x01h2")

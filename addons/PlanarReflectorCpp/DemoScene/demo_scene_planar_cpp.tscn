@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=4 uid="uid://bxce7m4enwcg6"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_4wmir"]
-[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_q65ek"]
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_wpxbp"]
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_base.gdshader" id="2_ku5ff"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
@@ -13,7 +13,7 @@ access_resolved_color = false
 access_resolved_depth = false
 needs_motion_vectors = false
 needs_normal_roughness = false
-script = ExtResource("1_q65ek")
+script = ExtResource("1_wpxbp")
 effect_enabled = true
 intersect_height = 0.0
 reflect_gap_fill = 0.0025
@@ -22,7 +22,7 @@ fill_radius_px = 24.0
 fill_aggressiveness = 1.0
 metadata/_custom_type_script = "uid://brsug76yttbj0"
 
-[sub_resource type="Compositor" id="Compositor_q65ek"]
+[sub_resource type="Compositor" id="Compositor_4wmir"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_q65ek"]
@@ -135,8 +135,9 @@ albedo_color = Color(0.351972, 0.636277, 5.77569e-07, 1)
 
 [node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
 main_camera = NodePath("../Camera3D")
-active_compositor = SubResource("Compositor_q65ek")
+active_compositor = SubResource("Compositor_4wmir")
 reflection_offset_position = Vector3(-1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0144205)
 mesh = SubResource("PlaneMesh_q65ek")
 surface_material_override/0 = SubResource("ShaderMaterial_74uhr")
 
