@@ -3,7 +3,7 @@
 
 [![Godot Engine](https://img.shields.io/badge/Godot-4.4+-blue.svg)](https://godotengine.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/yourusername/planar-reflection-system/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.1-green.svg)](https://github.com/yourusername/planar-reflection-system/releases)
 
 A high-performance **planar reflection system** for Godot 4.4+ designed specifically for **3D pixel art games**, but can be used in any game.
 
@@ -18,6 +18,8 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 - **Dual rendering system** - Separate game and editor modes
 - **Layer-based filtering** - Control what objects appear in reflections
 - **Custom environments** - Independent lighting for reflected scenes
+- **Version 1.0.1 brings Compositor Effect to hide/mask objects intersecting with PlanarReflector (like underwater objects).
+- **C++ version Binaries available for MacOS, Windows and Linux. (GDScript version also included, but required adding Script to a MeshInstance3D manually)
 
 ### 🎮 **Reflection & Performance Features**
 - **Camera mode detection** - Automatic perspective/orthographic handling
@@ -52,5 +54,7 @@ A high-performance **planar reflection system** for Godot 4.4+ designed specific
 
 ## 🔧 Technical Constraints
 - **Planar surfaces only** - Works best with flat surfaces
-- **No "below surface" object filtering** - It will show reflection of "underwater" elements for example. To workaround this, use cull-masks to ignore these objects.
+- **Hide objects intersecting with Planar Reflector is EXPERIMENTAL (Alpha stage) working with Compositor Effects. This means you can now hide underwater objects, for example. When available, I will update to the new solution explained here:https://github.com/DanTrz/Godot-PlanarReflector-CPP/issues/1
 - **Requires Plugin enabled for editor** - To see reflections in the Editor the plugin must be active
+
+Full CPP Code here: https://github.com/DanTrz/PlanarReflector-GDExtension-FullCPPProject 
