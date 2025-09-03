@@ -23,8 +23,8 @@ var parameter_storage_buffer: RID
 var temp_image: RID
 var temp_sampler: RID
 
-# FIX 1: No caching - create/use/discard pattern per frame to avoid accumulation
-# This prevents the systematic uniform buffer leaks identified in Issue #103400
+# cleanup fix 1: No caching - create/use/discard pattern per frame to avoid accumulation
+# This prevents the systematic uniform buffer leaks identified in Issue
 
 # Performance optimization caches
 var last_params: PackedFloat32Array = []
@@ -39,13 +39,13 @@ func _init() -> void:
 	rd = RenderingServer.get_rendering_device()
 	RenderingServer.call_on_render_thread(_initialize_compute)
 
-# FIX 2: Direct cleanup in NOTIFICATION_PREDELETE to avoid null instance errors
+# cleanup fix 2: Direct cleanup in NOTIFICATION_PREDELETE to avoid null instance errors
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		# FIX 3: Inline cleanup to prevent null instance function call errors
+		# cleanup fix 3: Inline cleanup to prevent null instance function call errors
 		if rd != null:
 			
-			# FIX 4: Only free root resources - dependency tracking handles the rest
+			# cleanup fix 4: Only free root resources - dependency tracking handles the rest
 			# This prevents "Attempted to free invalid ID" errors from double-freeing
 			
 			# Free temp resources first (no dependencies)
@@ -126,7 +126,7 @@ func _ensure_temp_image(size: Vector2i, like_color: RID) -> void:
 	tf.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT
 	temp_image = rd.texture_create(tf, RDTextureView.new(), [])
 
-# FIX 5: Create-use-discard pattern for uniform sets to prevent accumulation
+# cleanup fix 5: Create-use-discard pattern for uniform sets to prevent accumulation
 func _create_uniform_set(color_tex: RID, depth_tex: RID, pass_type: int, temp_image_rid: RID) -> RID:
 	var uniforms: Array[RDUniform] = []
 
@@ -274,7 +274,7 @@ func _render_callback(p_effect_callback_type: EffectCallbackType, p_render_data:
 		params[39] = 0.0
 		_update_params_if_changed(params)
 		
-		# FIX 6: Create uniform set for immediate use only
+		#  cleanup fix 6: Create uniform set for immediate use only
 		var uniform_set_h: RID = _create_uniform_set(color_tex, depth_tex, 0, temp_image)
 
 		var cl1 := rd.compute_list_begin()
