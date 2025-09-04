@@ -1,6 +1,6 @@
 [gd_resource type="Compositor" load_steps=3 format=3 uid="uid://cvhrerf6uw7tk"]
 
-[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_5lsne"]
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/Compositor/ReflectEffectGD.gd" id="1_5lsne"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
 resource_local_to_scene = false

@@ -79,6 +79,9 @@ func _initialize_compute() -> void:
 		return
 
 	var shader_file: RDShaderFile = load("uid://c6cyjnip1nl1v")
+	if shader_file == null:
+		shader_file = load("res://addons/PlanarReflectorCpp/SupportFiles/Compositor/reflection_effect_prepass_compute.glsl")
+
 	if shader_file:
 		var spirv: RDShaderSPIRV = shader_file.get_spirv()
 		shader = rd.shader_create_from_spirv(spirv)

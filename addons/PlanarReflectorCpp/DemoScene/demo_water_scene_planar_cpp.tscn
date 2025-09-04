@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://ctnyu7crkasft"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_2dtw1"]
-[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="2_2dtw1"]
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/Compositor/ReflectEffectGD.gd" id="2_2dtw1"]
 [ext_resource type="Shader" uid="uid://d321f1550xwkn" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/water_planar_toon_compositor_mask.gdshader" id="3_u4t1n"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]

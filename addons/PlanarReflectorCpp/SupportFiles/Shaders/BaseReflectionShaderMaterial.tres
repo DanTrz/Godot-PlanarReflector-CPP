@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_base.gdshader" id="1_cepju"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_u4t1n"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_qklve"]
 viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_psr7x"]
@@ -37,7 +37,7 @@ shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/metallic = 0.0
 shader_parameter/roughness = 0.5
 shader_parameter/specular = 0.5
-shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_u4t1n")
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_qklve")
 shader_parameter/reflection_strength = 0.1
 shader_parameter/is_orthogonal_camera = false
 shader_parameter/ortho_uv_scale = 1.0

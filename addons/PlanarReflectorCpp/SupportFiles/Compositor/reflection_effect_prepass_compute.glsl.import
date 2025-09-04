@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://c6cyjnip1nl1v"
+path="res://.godot/imported/reflection_effect_prepass_compute.glsl-38dac918968b2bb97ac9a66790c18a33.res"
+
+[deps]
+
+source_file="res://addons/PlanarReflectorCpp/SupportFiles/Compositor/reflection_effect_prepass_compute.glsl"
+dest_files=["res://.godot/imported/reflection_effect_prepass_compute.glsl-38dac918968b2bb97ac9a66790c18a33.res"]
+
+[params]
+

@@ -1,85 +1,8 @@
 [gd_scene load_steps=22 format=4 uid="uid://bxce7m4enwcg6"]
 
 [ext_resource type="Script" uid="uid://c7nkux51ybe7" path="res://addons/PlanarReflectorCpp/DemoScene/cam_rig.gd" id="1_4wmir"]
-[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/ReflectEffectGD.gd" id="1_wpxbp"]
+[ext_resource type="Script" uid="uid://brsug76yttbj0" path="res://addons/PlanarReflectorCpp/SupportFiles/Compositor/ReflectEffectGD.gd" id="2_4wmir"]
 [ext_resource type="Shader" uid="uid://bawxq16vak6cv" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_base.gdshader" id="2_ku5ff"]
-
-[sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = true
-effect_callback_type = 1
-access_resolved_color = false
-access_resolved_depth = false
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("1_wpxbp")
-effect_enabled = true
-intersect_height = 0.0
-reflect_gap_fill = 0.0025
-fill_enabled = false
-fill_radius_px = 24.0
-fill_aggressiveness = 1.0
-metadata/_custom_type_script = "uid://brsug76yttbj0"
-
-[sub_resource type="Compositor" id="Compositor_4wmir"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_q65ek"]
-size = Vector2(4, 4)
-subdivide_width = 4
-subdivide_depth = 4
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_4wmir"]
-viewport_path = NodePath("BasePlanarReflectorCPP/ReflectionViewPort")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_4wmir"]
-seed = 10
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wpxbp"]
-seamless = true
-as_normal_map = true
-noise = SubResource("FastNoiseLite_4wmir")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qklve"]
-seed = 10
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gnntj"]
-seamless = true
-as_normal_map = true
-noise = SubResource("FastNoiseLite_qklve")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_u2d4r"]
-seed = 10
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e87i0"]
-seamless = true
-as_normal_map = true
-noise = SubResource("FastNoiseLite_u2d4r")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_74uhr"]
-resource_local_to_scene = true
-render_priority = -1
-shader = ExtResource("2_ku5ff")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/metallic = 0.0
-shader_parameter/roughness = 0.5
-shader_parameter/specular = 0.5
-shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_4wmir")
-shader_parameter/reflection_strength = 0.1
-shader_parameter/is_orthogonal_camera = false
-shader_parameter/ortho_uv_scale = 1.0
-shader_parameter/texture_normal = SubResource("NoiseTexture2D_wpxbp")
-shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_gnntj")
-shader_parameter/normal_scale = 1.0
-shader_parameter/normal_uv_mult = 1.0
-shader_parameter/distortion_strength = 0.0
-shader_parameter/uv1_scale = Vector3(0, 0, 0)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/proximity_fade_distance = 0.0
-shader_parameter/refraction = 0.0
-shader_parameter/texture_refraction = SubResource("NoiseTexture2D_e87i0")
-shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_500ed"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -131,15 +54,81 @@ shadow_mesh = SubResource("ArrayMesh_onoc1")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4wmir"]
 albedo_color = Color(0.351972, 0.636277, 5.77569e-07, 1)
 
-[node name="demo_scene_planar_cpp" type="Node3D"]
+[sub_resource type="CompositorEffect" id="CompositorEffect_ap4ou"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 1
+access_resolved_color = false
+access_resolved_depth = false
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_4wmir")
+effect_enabled = true
+intersect_height = 0.0
+reflect_gap_fill = 0.0025
+fill_enabled = false
+fill_radius_px = 24.0
+fill_aggressiveness = 1.0
+metadata/_custom_type_script = "uid://brsug76yttbj0"
 
-[node name="BasePlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
-main_camera = NodePath("../Camera3D")
-active_compositor = SubResource("Compositor_4wmir")
-reflection_offset_position = Vector3(-1, 0, 0)
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0144205)
-mesh = SubResource("PlaneMesh_q65ek")
-surface_material_override/0 = SubResource("ShaderMaterial_74uhr")
+[sub_resource type="Compositor" id="Compositor_4wmir"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ap4ou")])
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wpxbp"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4wmir"]
+viewport_path = NodePath("PlanarReflectorCPP/ReflectionViewPort")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gnntj"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_u2d4r"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_gnntj")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_e87i0"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_74uhr"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_e87i0")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_74x33"]
+seed = 10
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_raenl"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_74x33")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4urd"]
+resource_local_to_scene = true
+render_priority = -1
+shader = ExtResource("2_ku5ff")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/specular = 0.5
+shader_parameter/reflection_screen_texture = SubResource("ViewportTexture_4wmir")
+shader_parameter/reflection_strength = 0.1
+shader_parameter/is_orthogonal_camera = false
+shader_parameter/ortho_uv_scale = 1.0
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_u2d4r")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_74uhr")
+shader_parameter/normal_scale = 1.0
+shader_parameter/normal_uv_mult = 1.0
+shader_parameter/distortion_strength = 0.0
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/proximity_fade_distance = 0.0
+shader_parameter/refraction = 0.0
+shader_parameter/texture_refraction = SubResource("NoiseTexture2D_raenl")
+shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
+
+[node name="demo_scene_planar_cpp" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_q65ek")
@@ -157,7 +146,13 @@ far = 1000.0
 script = ExtResource("1_4wmir")
 
 [node name="BlenderMonkey" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.282896, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.159371, 0)
 mesh = SubResource("ArrayMesh_ku5ff")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_4wmir")
+
+[node name="PlanarReflectorCPP" type="PlanarReflectorCPP" parent="." node_paths=PackedStringArray("main_camera")]
+main_camera = NodePath("../Camera3D")
+active_compositor = SubResource("Compositor_4wmir")
+mesh = SubResource("PlaneMesh_wpxbp")
+surface_material_override/0 = SubResource("ShaderMaterial_f4urd")
