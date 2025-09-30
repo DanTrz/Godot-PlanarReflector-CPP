@@ -39,39 +39,88 @@ func _init() -> void:
 	rd = RenderingServer.get_rendering_device()
 	RenderingServer.call_on_render_thread(_initialize_compute)
 
+#TODO(LOW): Fix #Bug - Compositor Effect is either Leaking RID or Errors with  "This function (free) can only be called from the render thread. "
+#PREVIOUS CODE NOT WORKING ON SCENE TRANSITION CALL_DEFERRED
 # cleanup fix 2: Direct cleanup in NOTIFICATION_PREDELETE to avoid null instance errors
+# func _notification(what: int) -> void:
+# 	if what == NOTIFICATION_PREDELETE:
+# 		# cleanup fix 3: Inline cleanup to prevent null instance function call errors
+# 		if rd != null:
+			
+# 			# cleanup fix 4: Only free root resources - dependency tracking handles the rest
+# 			# This prevents "Attempted to free invalid ID" errors from double-freeing
+			
+# 			# Free temp resources first (no dependencies)
+# 			if temp_image.is_valid():
+# 				rd.free_rid(temp_image)
+# 				temp_image = RID()
+			
+# 			if temp_sampler.is_valid():
+# 				rd.free_rid(temp_sampler)
+# 				temp_sampler = RID()
+			
+# 			if sampler_rid.is_valid():
+# 				rd.free_rid(sampler_rid)
+# 				sampler_rid = RID()
+			
+# 			if parameter_storage_buffer.is_valid():
+# 				rd.free_rid(parameter_storage_buffer)
+# 				parameter_storage_buffer = RID()
+			
+# 			# Free shader last - this automatically frees pipeline due to dependency tracking
+# 			# DO NOT manually free pipeline - this causes double-free errors
+# 			if shader.is_valid():
+# 				rd.free_rid(shader)
+# 				shader = RID()
+# 				# pipeline is automatically freed by dependency tracking
+				# pipeline = RID()
+
+#TODO - TEMP NEW CODE (Attempting a Workaround) - try to make WORKING ON SCENE TRANSITION CALL_DEFERRED
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		# cleanup fix 3: Inline cleanup to prevent null instance function call errors
-		if rd != null:
-			
-			# cleanup fix 4: Only free root resources - dependency tracking handles the rest
-			# This prevents "Attempted to free invalid ID" errors from double-freeing
-			
-			# Free temp resources first (no dependencies)
-			if temp_image.is_valid():
-				rd.free_rid(temp_image)
-				temp_image = RID()
-			
-			if temp_sampler.is_valid():
-				rd.free_rid(temp_sampler)
-				temp_sampler = RID()
-			
-			if sampler_rid.is_valid():
-				rd.free_rid(sampler_rid)
-				sampler_rid = RID()
-			
-			if parameter_storage_buffer.is_valid():
-				rd.free_rid(parameter_storage_buffer)
-				parameter_storage_buffer = RID()
-			
-			# Free shader last - this automatically frees pipeline due to dependency tracking
-			# DO NOT manually free pipeline - this causes double-free errors
-			if shader.is_valid():
-				rd.free_rid(shader)
-				shader = RID()
-				# pipeline is automatically freed by dependency tracking
-				pipeline = RID()
+		# Capture RIDs locally before object destruction
+		# print("Compositor _notification called for ReflectEffectPrePassGD")
+		var cleanup_data = {
+			"temp_image": temp_image,
+			"temp_sampler": temp_sampler,
+			"sampler_rid": sampler_rid,
+			"parameter_storage_buffer": parameter_storage_buffer,
+			"shader": shader,
+			"pipeline": pipeline,
+			"rd": rd
+			}
+		# Pass the cleanup data to render thread
+		RenderingServer.call_on_render_thread(_cleanup_resources_static.bind(cleanup_data))
+
+# Static cleanup function that doesn't reference 'self'
+static func _cleanup_resources_static(cleanup_data: Dictionary) -> void:
+	# print("Compositor cleanup started for ReflectEffectPrePassGD")
+	var render_device = cleanup_data.get("rd")
+	if not render_device:
+		return
+	
+	# Free temp resources first (no dependencies)
+	var temp_image = cleanup_data.get("temp_image")
+	if temp_image and temp_image.is_valid():
+		render_device.free_rid(temp_image)
+
+	var temp_sampler = cleanup_data.get("temp_sampler")
+	if temp_sampler and temp_sampler.is_valid():
+		render_device.free_rid(temp_sampler)
+
+	var sampler_rid = cleanup_data.get("sampler_rid")
+	if sampler_rid and sampler_rid.is_valid():
+		render_device.free_rid(sampler_rid)
+
+	var parameter_storage_buffer = cleanup_data.get("parameter_storage_buffer")
+	if parameter_storage_buffer and parameter_storage_buffer.is_valid():
+		render_device.free_rid(parameter_storage_buffer)
+
+	# Free shader last - this automatically frees pipeline due to dependency tracking
+	var shader = cleanup_data.get("shader")
+	if shader and shader.is_valid():
+		render_device.free_rid(shader)
+	# print("Compositor cleanup ended for ReflectEffectPrePassGD")
 
 func _initialize_compute() -> void:
 	rd = RenderingServer.get_rendering_device()
