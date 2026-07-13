@@ -7,13 +7,14 @@ reloadable = true
 [libraries]
 
 windows.debug.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.windows.template_debug.x86_64.dll"
-windows.release.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.windows.template_release.x86_64.dll"
 
 linux.debug.x86_64 = "res://addons/PlanarReflectorCpp/bin/libPlanarReflectorCPP.linux.template_debug.x86_64.so"
 linux.release.x86_64 = "res://addons/PlanarReflectorCpp/bin/libPlanarReflectorCPP.linux.template_release.x86_64.so"
 
 macos.debug = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.template_debug.framework/libPlanarReflectorCPP.macos.template_debug"
-macos.release = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.template_debug.framework/libPlanarReflectorCPP.macos.template_debug"
+macos.release = "res://addons/PlanarReflectorCpp/bin/PlanarReflectorCPP.macos.template_release.framework/libPlanarReflectorCPP.macos.template_release"
 
 [icons]
 PlanarReflectorCPP = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"
+PlanarReflectorClippingCPP = "res://addons/PlanarReflectorCpp/SupportFiles/icons_reflection.png"

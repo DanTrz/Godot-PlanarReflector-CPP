@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://dlreytnsy7ya2"]
 
-[ext_resource type="Shader" uid="uid://d321f1550xwkn" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/water_planar_toon_compositor_mask.gdshader" id="1_7s6o5"]
+[ext_resource type="Shader" path="res://addons/PlanarReflectorCpp/SupportFiles/Shaders/planar_reflection_clip_surface.gdshader" id="1_7s6o5"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2dtw1"]
 

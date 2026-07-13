@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="PlanarReflector-CPP"
 run/main_scene="uid://bxce7m4enwcg6"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 
 [display]
 
@@ -25,3 +29,14 @@ project/assembly_name="PlanarReflector-CPP"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/PlanarReflectorCpp/plugin.cfg")
+
+[shader_globals]
+
+planar_water_height={
+"type": "float",
+"value": 0.0
+}
+planar_reflection_camera_bit={
+"type": "uint",
+"value": 524288
+}
