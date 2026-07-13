@@ -9,7 +9,7 @@ uniform vec4 water_color : source_color = vec4(0.08, 0.32, 0.42, 0.72);
 uniform float reflection_strength : hint_range(0.0, 1.0) = 0.75;
 uniform bool reflection_flip_x = true;
 uniform float debug_selection_highlight : hint_range(0.0, 1.0) = 0.0;
-uniform vec3 debug_selection_color : source_color = vec3(1.0, 0.18, 0.02);
+uniform vec4 debug_selection_color : source_color = vec4(1.0, 0.18, 0.02, 1.0);
 
 void fragment() {
 	vec2 reflection_uv = SCREEN_UV;
@@ -18,7 +18,7 @@ void fragment() {
 	}
 	vec3 reflection = texture(reflection_screen_texture, reflection_uv).rgb;
 	ALBEDO = mix(water_color.rgb, reflection, reflection_strength);
-	ALBEDO = mix(ALBEDO, debug_selection_color, debug_selection_highlight * 0.65);
-	EMISSION = debug_selection_color * debug_selection_highlight * 0.35;
+	ALBEDO = mix(ALBEDO, debug_selection_color.rgb, debug_selection_highlight * 0.65)  ;
+	EMISSION = debug_selection_color.rgb * debug_selection_highlight * 0.35;
 	ALPHA = water_color.a;
 }
